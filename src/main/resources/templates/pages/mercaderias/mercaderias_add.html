@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="plantilla/base :: head"></head>
+<body>
+    <div class="container">
+        <header th:replace="plantilla/base :: header"></header>
+        <p><p>
+        <div class="row">
+            <div class="col-6">
+                <div class="card bg-light">
+                    <div class="card-header" th:text="${titulo}"></div>
+                    <div class="card-body">
+                        <form th:action="@{/pages/mercaderias/save}" method="post" th:object="${mercaderia}" enctype="multipart/form-data">
+                            <input type="hidden" th:field="*{id}" class="form-control" id="id" name="id">
+                            <div class="mb-3 mt-3">
+                                <label for="desc" class="form-label">Descripción:</label>
+                                <input type="text" th:field="*{descripcion}" class="form-control" name="descripcion" id="desc" required="required">
+                            </div>
+                             <div class="mb-3">
+						        <label for="file" class="form-label">Imagen:</label>
+						        <input type="file" id="file" name="file" class="form-control">
+						    </div>
+                            <div class="mb-3">
+                                <label for="precio_cmp" class="form-label">Precio Compra:</label>
+                                <input type="number" th:field="*{precio_cmp}" class="form-control" id="precio_cmp" name="precio_cmp" required="required">
+                            </div>
+                            <div class="mb-3">
+                                <label for="precio_vta" class="form-label">Precio Venta:</label>
+                                <input type="number" th:field="*{precio_vta}" class="form-control" id="precio_vta" name="precio_vta" required="required">
+                            </div>
+                            <div class="mb-3">
+                                <label for="cantidad" class="form-label">Cantidad:</label>
+                                <input type="number" th:field="*{cantidad}" class="form-control" id="cantidad" name="cantidad" required="required">
+                            </div>
+                            <div class="mb-3">
+                                <label for="categoria" class="form-label">Categoría:</label>
+                                <select th:field="*{categoria}" class="form-select" id="categoria" required="required">
+                                    <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.descripcion}"></option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="marca" class="form-label">Marca:</label>
+                                <select th:field="*{marca}" class="form-select" id="marca" required="required">
+                                    <option th:each="mar : ${marcas}" th:value="${mar.id}" th:text="${mar.descripcion}"></option>
+                                </select>
+                            </div>
+                            <div>
+                                <input type="submit" class="btn btn-primary" value="Guardar">
+                                <a th:href="@{/pages/mercaderias/}" class="btn btn-secondary">Cancelar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

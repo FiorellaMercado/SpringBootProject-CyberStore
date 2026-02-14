@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="plantilla/base :: head"></head>
+<body>
+    <div class="container">
+        <header th:replace="plantilla/base :: header"></header>
+        <p><p>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 th:text="${titulo}" class="card-title"></h5>
+                        <a th:href="@{/pages/clientes/create}" class="btn btn-primary btn-sm" th:text="'Nuevo'" title="Crea nuevo registro"></a>
+                        <p></p>
+                        <table class="table datatable">
+                            <thead>
+                                <tr>
+                                    <th><b>ID</b></th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Email</th>
+                                    <th>Teléfono</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="cli : ${clientes}">
+                                    <td th:text="${cli.id}"></td>
+                                    <td th:text="${cli.nombre}"></td>
+                                    <td th:text="${cli.apellido}"></td>
+                                    <td th:text="${cli.email}"></td>
+                                    <td th:text="${cli.telefono}"></td>
+                                    <td>
+                                    <a th:href="@{/pages/clientes/edit/}+${cli.id}" class="btn btn-outline-primary btn-sm" th:text="'Editar'" title="Editar registro"></a>
+                                        <a th:href="@{/pages/clientes/delete/}+${cli.id}" class="btn btn-secondary btn-sm" th:text="'Borrar'" title="Borrar registro" onclick="return confirm('¿Está seguro de borrar?');"></a>
+                                        
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

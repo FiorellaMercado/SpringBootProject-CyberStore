@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="plantilla/base :: head"></head>
+<body>
+    <div class="container">
+        <header th:replace="plantilla/base :: header"></header>
+        <p><p>
+        <div class="row">
+            <div class="col-6">
+                <div class="card bg-light">
+                    <div class="card-header" th:text="${titulo}"></div>
+                    <div class="card-body">
+                        <form th:action="@{/pages/detallefacturas/save}" method="post" th:object="${detalleFactura}">
+                            <input type="hidden" th:field="*{id}" class="form-control" id="id" name="id">
+                            <div class="mb-3">
+                                <label for="mercaderia" class="form-label">Mercadería:</label>
+                                <select th:field="*{mercaderia}" class="form-select" required="required">
+                                    <option th:each="mer : ${mercaderias}" th:value="${mer.id}" th:text="${mer.descripcion}"></option>
+                                </select>
+                            </div>
+                            <div class="mb-3 mt-3">
+                                <label for="cantidad" class="form-label">Cantidad:</label>
+                                <input type="number" th:field="*{cantidad}" class="form-control" name="cantidad" id="cantidad" required="required">
+                            </div>
+                            <div class="mb-3">
+                                <label for="precioUnitario" class="form-label">Precio Unitario:</label>
+                                <input type="number" step="0.01" th:field="*{precioUnitario}" class="form-control" id="precioUnitario" name="precioUnitario" required="required">
+                            </div>
+                            <div class="mb-3">
+                                <label for="subtotal" class="form-label">Subtotal:</label>
+                                <input type="number" step="0.01" th:field="*{subtotal}" class="form-control" id="subtotal" name="subtotal" required="required">
+                            </div>
+                            <div class="mb-3">
+                                <label for="factura" class="form-label">Factura:</label>
+                                <select th:field="*{factura}" class="form-select" required="required">
+                                    <option th:each="fac : ${facturas}" th:value="${fac.id}" th:text="${fac.id}"></option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <input type="submit" class="btn btn-primary" value="Guardar">
+                                
+                                <a th:href="@{/pages/detallefacturas/}" class="btn btn-secondary">Cancelar</a>
+                                
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

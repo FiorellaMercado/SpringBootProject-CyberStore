@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="plantilla/base :: head">
+
+</head>
+
+<body>
+   <div class="container">
+   
+   	<header th:replace="plantilla/base :: header"></header>
+	<p>
+	<p>
+	<div class="pagetitle">
+	</div>
+	<section class="section">
+		<div class="row">
+			<div class="col-lg-12">
+
+				<div class="card">
+					<div class="card-body">
+                       
+						<h5 th:text="${titulo}" class="card-title"></h5>
+						 <a th:href="@{/pages/categorias/create}" class="btn btn-primary btn-sm"
+						    th:text="'Nuevo'" title="Crea nuevo registro"></a>
+						<p></p>
+
+						
+						<table class="table datatable">
+							<thead>
+								<tr>
+									<th><b>ID</b></th>
+									<th>Descripción</th>
+									<th>Observación</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								
+								<tr th:each="cat:${categorias}">
+								   <td th:text="${cat.id}"></td>
+								   <td th:text="${cat.descripcion}"></td>
+								   <td th:text="${cat.observacion}"></td>
+								   <td>
+								   <a th:href="@{/pages/categorias/edit/}+${cat.id}" 
+								         class="btn btn-outline-primary btn-sm"
+								         th:text="'Editar'" title="Editar registro"></a>
+								      <a th:href="@{/pages/categorias/delete/}+${cat.id}" 
+								         class="btn btn-secondary btn-sm"
+								         th:text="'Borrar'" title="Borrar registro"
+								         onclick="return confirm('Esta seguro de borrar ?');"></a>
+								      
+								      
+								   </td>
+								</tr>
+					
+							</tbody>
+						</table>
+						
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</section>
+
+   </div>
+
+</body>
+
+
+</html>

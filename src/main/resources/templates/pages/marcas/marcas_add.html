@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="plantilla/base :: head">
+
+</head>
+
+<body>
+
+	<div class="container">
+
+		<header th:replace="plantilla/base :: header"></header>
+		<p>
+		<p>
+		<div class="row">
+			<div class="col-6">
+				<div class="card bg-light">
+					<div class="card-header" th:text="${titulo}"></div>
+					<div class="card-body">
+
+						<form th:action="@{/pages/marcas/save}" method="post" th:object="${marca}">
+							 <input	type="hidden" th:field="*{id}" class="form-control"	id="id" name="id">
+							<div class="mb-3 mt-3">
+								<label for="desc" class="form-label">Descripción:</label>
+								 <input	type="text" th:field="*{descripcion}" class="form-control"
+									name="desc" id="desc" required="required">
+							</div>
+						
+							<div>
+								<input type="submit" class="btn btn-primary" value="Guardar">
+					    	    <a th:href="@{/pages/marcas/}" class="btn btn-secondary">Cancelar</a>
+							</div>
+					    					    	
+						</form>
+
+					</div>
+					<div class="card-footer"></div>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>

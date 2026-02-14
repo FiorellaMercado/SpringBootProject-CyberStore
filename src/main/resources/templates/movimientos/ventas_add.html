@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head th:replace="plantilla/base :: head"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo}">Nueva Venta</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+<header th:replace="plantilla/base :: header"></header>
+    <div class="container p-3">
+        <div class="card-header " th:text="${titulo}">Nueva Venta</div>
+        <form th:action="@{/movimientos/save}" th:object="${factura}" method="post">
+            <!-- Campo de Fecha -->
+            <div class="form-group">
+                <label for="fecha" class="form-label">Fecha:</label>
+                <input type="date" th:field="*{fecha}" class="form-control" required>
+            </div>
+
+            <!-- Selección de Cliente -->
+            <div class="form-group">
+                <label for="cliente" class="form-label">Cliente:</label>
+                <select th:field="*{cliente}" class="form-select" required="required">
+                <option value="" selected>Seleccione cliente</option> 
+                    <option th:each="cli : ${clientes}" th:value="${cli.id}" th:text="${cli.nombre + ' ' + cli.apellido}"></option>
+                </select>
+            </div>
+            <br>
+            <!-- Detalles de Factura -->
+            <h4>Detalles de Factura</h4>
+            <table class="table" id="detallesFactura">
+                <thead>
+                    <tr>
+                        <th>Mercadería</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                        <th>
+                            <button type="button" class="btn btn-primary" id="addRow">+</button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Iteramos sobre la lista de detalles -->
+                    <tr th:each="detalle, iterStat : ${factura.detalleFacturas}" class="detalle-row">
+                        <td>
+                            <select th:field="*{detalleFacturas[__${iterStat.index}__].mercaderia}" 
+                                    class="form-select">
+                                    <option value="" selected>Seleccione mercadería</option> 
+                                <option th:each="mercaderia : ${mercaderias}" 
+                                        th:value="${mercaderia.id}" 
+                                        th:text="${mercaderia.descripcion}"></option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" 
+                                   th:field="*{detalleFacturas[__${iterStat.index}__].cantidad}" 
+                                   class="form-control" min="1" required>
+                        </td>
+                        <td>
+                            <input type="number" 
+                                   th:field="*{detalleFacturas[__${iterStat.index}__].precioUnitario}" 
+                                   class="form-control" step="0.01" min="0.01" required>
+                        </td>
+                        <td>
+                            <input type="text" 
+                                   th:field="*{detalleFacturas[__${iterStat.index}__].subtotal}" 
+                                   class="form-control" readonly>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-secondary">-</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="form-group">
+                <label for="total" class="form-label">Total:</label>
+                <input type="text" id="total" class="form-control" readonly>
+            </div>
+            <br>
+            <!-- Botón de Guardar -->
+            <button type="submit" class="btn btn-primary">Guardar Factura</button>
+        </form>
+    </div>
+</div>
+
+<!-- manejar las filas -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addRowButton = document.getElementById('addRow');
+        const tableBody = document.querySelector("#detallesFactura tbody");
+        const totalInput = document.getElementById('total');
+
+        // Contador para identificar dinámicamente los índices de las filas nuevas
+        let rowCounter = document.querySelectorAll("#detallesFactura .detalle-row").length;
+
+        // Función para actualizar el subtotal
+        function calcularSubtotal(row) {
+            const quantity = row.querySelector("input[name*='cantidad']").value || 0;
+            const price = row.querySelector("input[name*='precioUnitario']").value || 0;
+            row.querySelector("input[name*='subtotal']").value = (quantity * price).toFixed(2);
+        }
+
+        // Función para calcular el total
+        function calcularTotal() {
+            const subtotales = document.querySelectorAll("input[name*='subtotal']");
+            let total = 0;
+            subtotales.forEach(subtotal => {
+                total += parseFloat(subtotal.value || 0);
+            });
+            totalInput.value = total.toFixed(2);
+        }
+
+        // Evento delegado para manejar la eliminación de filas
+        tableBody.addEventListener('click', function (event) {
+            if (event.target.classList.contains('btn-secondary')) {
+                const row = event.target.closest('tr');
+                row.remove();
+                calcularTotal(); 
+            }
+        });
+
+        // Función para agregar una nueva fila
+        addRowButton.addEventListener('click', function() {
+            const firstRow = tableBody.querySelector("tr");
+            const newRow = firstRow.cloneNode(true); 
+
+           
+            rowCounter++;
+
+            // Actualizar los atributos `name` y `id` 
+            newRow.querySelectorAll("input, select").forEach(input => {
+                if (input.name) {
+                    input.name = input.name.replace(/\[\d+\]/, `[${rowCounter}]`); 
+                }
+                if (input.id) {
+                    input.id = input.id.replace(/\d+/, rowCounter); 
+                }
+                if (input.type === "number" || input.type === "text") {
+                    input.value = ""; 
+                }
+                if (input.tagName === "SELECT") {
+                    input.selectedIndex = 0; 
+                }
+            });
+
+            // Agregar evento de cambio al nuevo select de mercadería
+            const newSelect = newRow.querySelector("select[name*='mercaderia']");
+            newSelect.addEventListener("change", function () {
+                const mercaderiaId = newSelect.value;
+                fetch(`/movimientos/mercaderias/precio/${mercaderiaId}`)
+                    .then(response => response.json())
+                    .then(precio => {
+                        if (precio !== 0) {
+                            newRow.querySelector("input[name*='precioUnitario']").value = precio.toFixed(2);
+                            calcularSubtotal(newRow); 
+                            calcularTotal(); 
+                        } else {
+                            newRow.querySelector("input[name*='precioUnitario']").value = ''; 
+                        }
+                    })
+                    .catch(error => console.error('Error al obtener el precio:', error));
+            });
+
+            // Agregar eventos a los nuevos campos de cantidad y precio unitario
+            newRow.querySelectorAll("input[name*='cantidad'], input[name*='precioUnitario']").forEach(input => {
+                input.addEventListener("input", function () {
+                    calcularSubtotal(newRow); 
+                    calcularTotal(); 
+                });
+            });
+
+            
+            tableBody.appendChild(newRow);
+        });
+
+       
+        document.querySelectorAll("#detallesFactura .detalle-row").forEach(row => {
+            const inputs = row.querySelectorAll("input[name*='cantidad'], input[name*='precioUnitario']");
+            inputs.forEach(input => {
+                input.addEventListener("input", function () {
+                    calcularSubtotal(row); 
+                    calcularTotal(); 
+                });
+            });
+
+            const select = row.querySelector("select[name*='mercaderia']");
+            select.addEventListener("change", function () {
+                const mercaderiaId = select.value;
+                fetch(`/movimientos/mercaderias/precio/${mercaderiaId}`)
+                    .then(response => response.json())
+                    .then(precio => {
+                        if (precio !== 0) {
+                            row.querySelector("input[name*='precioUnitario']").value = precio.toFixed(2);
+                            calcularSubtotal(row); 
+                        } else {
+                            row.querySelector("input[name*='precioUnitario']").value = ''; 
+                        }
+                    })
+                    .catch(error => console.error('Error al obtener el precio:', error));
+            });
+        });
+
+        calcularTotal(); 
+    });
+</script>
+
+</body>
+</html>

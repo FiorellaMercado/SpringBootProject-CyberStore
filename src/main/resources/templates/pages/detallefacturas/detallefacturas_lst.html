@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="plantilla/base :: head"></head>
+<body>
+    <div class="container">
+        <header th:replace="plantilla/base :: header"></header>
+        <p></p>
+        <div class="row">
+            <div class="col-12">
+                <h2 th:text="${titulo}"></h2>
+                <a th:href="@{/pages/detallefacturas/create}" class="btn btn-primary btn-sm">Agregar Nuevo Detalle de Factura</a>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                            <th>Factura</th>
+                            <th>Mercadería</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="detalleFactura : ${detallefacturas}">
+                            <td th:text="${detalleFactura.id}"></td>
+                            <td th:text="${detalleFactura.cantidad}"></td>
+                            <td th:text="${detalleFactura.precioUnitario}"></td>
+                            <td th:text="${detalleFactura.subtotal}"></td>
+                            <td th:text="${detalleFactura.factura.id}"></td>
+                            <td th:text="${detalleFactura.mercaderia.descripcion}"></td>
+                            <td>
+                                <a th:href="@{'/pages/detallefacturas/edit/' + ${detalleFactura.id}}" class="btn btn-outline-primary btn-sm">Editar</a>
+                                <a th:href="@{'/pages/detallefacturas/delete/' + ${detalleFactura.id}}" class="btn btn-secondary btn-sm" onclick="return confirm('¿Está seguro de que desea eliminar este detalle de factura?');">Eliminar</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="plantilla/base :: head">
+    <style>
+        
+        .hero-section {
+            background-image: url('/images/hero-background.jpg'); 
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .feature-card {
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header th:replace="plantilla/base :: header"></header>
+
+        <!-- Sección principal de bienvenida -->
+        <section class="hero-section mb-5">
+            <h1 class="display-4">¡Bienvenido a CyberStore!</h1>
+            <p class="lead">Encuentra todo lo que necesitas en un solo lugar.</p>
+            <a class="btn btn-primary btn-lg" th:href="@{/pages/mercaderias/}" role="button">Explorar productos</a>
+        </section>
+
+		<img src="/img/tienda.jpg" alt="tienda" width=100%>
+        
+
+        <!-- Pie de página -->
+        <footer  class="text-dark text-center p-0">
+        <hr class="text-primary">
+            <p>© 2023 CyberStore. Todos los derechos reservados.</p>
+            <p><a href="#" class="text-primary">Política de Privacidad</a> | <a href="#" class="text-primary">Términos de Servicio</a></p>
+        </footer>
+    </div>
+</body>
+</html>
+      

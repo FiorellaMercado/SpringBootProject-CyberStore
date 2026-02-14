@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="plantilla/base :: head"></head>
+<body>
+    <div class="container">
+        <header th:replace="plantilla/base :: header"></header>
+        <p><p>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 th:text="${titulo}" class="card-title"></h5>
+                        <a th:href="@{/pages/mercaderias/create}" class="btn btn-primary btn-sm" th:text="'Nuevo'" title="Crea nuevo registro"></a>
+                        <p></p>
+                        <table class="table datatable">
+                            <thead>
+                                <tr>
+                                    <th><b>ID</b></th>
+                                    <th>Descripción</th>
+                                    <th>Imagen</th>
+                                    <th>Precio Compra</th>
+                                    <th>Precio Venta</th>
+                                    <th>Cantidad</th>
+                                    <th>Categoría</th>
+                                    <th>Marca</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="mer : ${mercaderias}">
+                                    <td th:text="${mer.id}"></td>
+                                    <td th:text="${mer.descripcion}"></td>
+                                     <td>
+						                <img th:src="@{/pages/mercaderias/imagen/{id}(id=${mer.id})}" 
+						                     alt="Imagen de Mercadería" style="width: 100px; height: 100px;">
+						            </td>
+                                    <td th:text="${mer.precio_cmp}"></td>
+                                    <td th:text="${mer.precio_vta}"></td>
+                                    <td th:text="${mer.cantidad}"></td>
+                                    <td th:text="${mer.categoria.descripcion}"></td> 
+                                    <td th:text="${mer.marca.descripcion}"></td>
+                                    <td>
+                                    	<a th:href="@{/pages/mercaderias/edit/}+${mer.id}" class="btn btn-outline-primary btn-sm" th:text="'Editar'" title="Editar registro"></a>
+                                        <a th:href="@{/pages/mercaderias/delete/}+${mer.id}" class="btn btn-secondary btn-sm" th:text="'Borrar'" title="Borrar registro" onclick="return confirm('¿Está seguro de borrar?');"></a>
+                                        
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
