@@ -26,17 +26,13 @@ Permite administrar clientes, productos, facturas, ventas y usuarios
 
 ##  Funcionalidades
 
-- 🔐 Login
-- 👥 Gestión de usuarios
-- 📦 Gestión de mercaderías
-- 🏷 Gestión de categorías y marcas
-- 🧾 Gestión de facturas y detalle de ventas
-- 👤 Gestión de clientes y proveedores
+-  Login
+-  Gestión de usuarios
+-  Gestión de mercaderías
+-  Gestión de categorías y marcas
+-  Gestión de facturas y detalle de ventas
+-  Gestión de clientes y proveedores
 
----
-## Captura
-
-<img width="1299" height="723" alt="cybercompl" src="https://github.com/user-attachments/assets/63c41b70-da10-48ba-8528-dfaa738a59d9" />
 
 ---
 ## Documentación
